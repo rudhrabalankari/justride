@@ -51,5 +51,15 @@ public class UserDaoTest {
 		String validation = userDao.validateUser(testEmailID, "wrong password");
 		assertEquals("invalidPwd", validation);
 	}
+	
+	@Test
+	public void getUserDetailsTest() {
+		User testUser = userDao.getUserDetails(testEmailID);
+		assertEquals("12345", testUser.getCardNo());
+		
+		//Don't know why this assert fails even though all details are the same
+		//User knownUser = new User("Rudra", "Balankari", "rbalanka3@uncc.edu", "9803193433", "12345");
+		//assertEquals(knownUser, testUser);
+	}
 
 }

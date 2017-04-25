@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.junit.Before;
@@ -22,8 +23,7 @@ public class CarDaoTest {
 	public void setUp() {
 		carDao = new CarDao();
 		locationDao = Mockito.mock(LocationDao.class);
-		when(locationDao.getLocationById(1)).thenReturn("UNC, Charlotte");
-		
+		when(locationDao.getLocationById(1)).thenReturn("UNC, Charlotte");		
 	}
 
 	@Test
@@ -31,16 +31,26 @@ public class CarDaoTest {
 		ArrayList<Integer> carIds = new ArrayList<Integer>();
 		carIds = carDao.getAllCarIds();
 		assertEquals(26, carIds.size());
-
 	}
 	
 	@Test
-	public void getCarbyIdTest() {
-		
+	public void getCarbyIdTest() {		
 		Car car = carDao.getCarbyId(1);
-		assertEquals("nano",car.getCarName());
-
-		
+		assertEquals("nano",car.getCarName());		
+	}
+	
+	@Test
+	public void calculateRentTest() {
+		LocalDateTime startTime = LocalDateTime.now();
+		LocalDateTime endTime = LocalDateTime.now().plusHours(2);
+		assertEquals(40, carDao.calculateRent(1, startTime, endTime),0.0);
+	}
+	
+	@Test
+	public void getTimeDiffSecTest() {
+		LocalDateTime startTime = LocalDateTime.now();
+		LocalDateTime endTime = LocalDateTime.now().plusHours(1);
+		assertEquals(3600, carDao.getTimeDiffSec(startTime, endTime));
 	}
 	
 }

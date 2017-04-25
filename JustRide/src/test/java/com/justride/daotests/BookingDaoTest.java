@@ -3,6 +3,8 @@ package com.justride.daotests;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.junit.Before;
@@ -12,6 +14,7 @@ import org.mockito.Mockito;
 import com.justride.dao.BookingDao;
 import com.justride.dao.CarDao;
 import com.justride.dao.LocationDao;
+import com.justride.models.Booking;
 import com.justride.models.Car;
 
 public class BookingDaoTest {
@@ -203,6 +206,15 @@ public class BookingDaoTest {
 
 	}
 	
-	
+	@Test
+	public void insertBookingTest() {
+		LocalDateTime intimestamp = LocalDateTime.now();
+		LocalDateTime outtimestamp = LocalDateTime.now().plusHours(1);
+		Booking testBookingInfo = new Booking("rbalanka3@uncc.edu", 1, intimestamp, outtimestamp, "UNC, Charlotte", (float) 500.85);
+		int result = dao.insertBooking(testBookingInfo);
+		
+		//it will pass test now. but if test is run again, this booking gets added again to the database & the expected car ID increases by 1
+		assertEquals(20, result);
+	}
 	
 }
