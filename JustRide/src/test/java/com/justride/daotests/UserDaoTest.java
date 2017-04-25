@@ -16,7 +16,7 @@ public class UserDaoTest {
 	private User user;
 	String testEmailID = "rbalanka3@uncc.edu";
 	String testPassword = "pass";
-	
+
 	@Before
 	public void setUp() throws Exception {
 		userDao = new UserDao();
@@ -35,15 +35,15 @@ public class UserDaoTest {
 		String registrationStatus = userDao.registrationSubmit(user);
 		assertEquals("existingEmail", registrationStatus);
 	}
-	
+
 	@Test
 	public void validateEmailTest() {
 		Boolean existingIDValue = userDao.validateEmail(testEmailID);
-		assertEquals(true, existingIDValue);		
+		assertEquals(true, existingIDValue);
 		boolean invalidEmail = userDao.validateEmail("invalidEMail@test");
 		assertEquals(false, invalidEmail);
 	}
-	
+
 	@Test
 	public void validateUserTest() {
 		String validUserValue = userDao.validateUser(testEmailID, testPassword);
@@ -51,15 +51,16 @@ public class UserDaoTest {
 		String validation = userDao.validateUser(testEmailID, "wrong password");
 		assertEquals("invalidPwd", validation);
 	}
-	
+
 	@Test
 	public void getUserDetailsTest() {
 		User testUser = userDao.getUserDetails(testEmailID);
 		assertEquals("12345", testUser.getCardNo());
-		
-		//Don't know why this assert fails even though all details are the same
-		//User knownUser = new User("Rudra", "Balankari", "rbalanka3@uncc.edu", "9803193433", "12345");
-		//assertEquals(knownUser, testUser);
+
+		// Don't know why this assert fails even though all details are the same
+		// User knownUser = new User("Rudra", "Balankari", "rbalanka3@uncc.edu",
+		// "9803193433", "12345");
+		// assertEquals(knownUser, testUser);
 	}
 
 }

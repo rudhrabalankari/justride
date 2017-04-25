@@ -19,21 +19,19 @@ import com.justride.models.Car;
 
 public class BookingDaoTest {
 
-	private BookingDao dao;
+	private BookingDao bookingDao;
 	private LocationDao locationDao;
 	private CarDao carDao;
 
-
 	@Before
 	public void testSetUp() {
-		dao = new BookingDao();
+		bookingDao = new BookingDao();
 		locationDao = Mockito.mock(LocationDao.class);
-		carDao = Mockito.mock(CarDao.class);	
-		
+		carDao = Mockito.mock(CarDao.class);
+
 		ArrayList<Integer> allCarIdList = new ArrayList<Integer>();
 		ArrayList<String> allLocationsList = new ArrayList<String>();
 		ArrayList<Integer> locationIdList = new ArrayList<Integer>();
-
 
 		allCarIdList.add(1);
 		allCarIdList.add(2);
@@ -61,7 +59,7 @@ public class BookingDaoTest {
 		allCarIdList.add(24);
 		allCarIdList.add(25);
 		allCarIdList.add(26);
-		
+
 		locationIdList.add(1);
 		locationIdList.add(3);
 		locationIdList.add(5);
@@ -90,131 +88,114 @@ public class BookingDaoTest {
 		locationListTest.add("UNC, Charlotte");
 		assertEquals(1, locationListTest.size());
 
-		validCarListTest = dao.getValidCarList("2017-10-27 20:30:10", "2017-10-27 20:30:10",locationListTest);
+		validCarListTest = bookingDao.getValidCarList("2017-10-27 20:30:10", "2017-10-27 20:30:10", locationListTest);
 		assertEquals(12, validCarListTest.size());
 
 		// to check if car already booked is not being returned
-		validCarListTest = dao.getValidCarList("2017-10-25 10:30:10", "2017-10-25 18:30:10",
-				locationListTest);
+		validCarListTest = bookingDao.getValidCarList("2017-10-25 10:30:10", "2017-10-25 18:30:10", locationListTest);
 		assertEquals(8, validCarListTest.size());
 
 		// if selected time interval falls inside the duration of a car already
 		// booked
-		validCarListTest = dao.getValidCarList("2017-10-25 09:30:10", "2017-10-25 19:30:10",
-				locationListTest);
+		validCarListTest = bookingDao.getValidCarList("2017-10-25 09:30:10", "2017-10-25 19:30:10", locationListTest);
 		assertEquals(8, validCarListTest.size());
 
 		// if the booked duration of a car already booked falls inside the
 		// selected time interval in home page
-		validCarListTest = dao.getValidCarList("2017-10-25 11:30:10", "2017-10-25 13:30:10",
-				locationListTest);
+		validCarListTest = bookingDao.getValidCarList("2017-10-25 11:30:10", "2017-10-25 13:30:10", locationListTest);
 		assertEquals(10, validCarListTest.size());
 
 		// to check different locations
 		ArrayList<String> locationListTest1 = new ArrayList<String>();
 		locationListTest1.add("Down Town");
-		validCarListTest = dao.getValidCarList("2017-10-27 20:30:10", "2017-10-27 20:30:10",
-				locationListTest1);
+		validCarListTest = bookingDao.getValidCarList("2017-10-27 20:30:10", "2017-10-27 20:30:10", locationListTest1);
 		assertEquals(8, validCarListTest.size());
 
 		ArrayList<String> locationListTest2 = new ArrayList<String>();
 		locationListTest2.add("Concord Mills");
-		validCarListTest = dao.getValidCarList("2017-10-27 20:30:10", "2017-10-27 20:30:10",
-				locationListTest2);
+		validCarListTest = bookingDao.getValidCarList("2017-10-27 20:30:10", "2017-10-27 20:30:10", locationListTest2);
 		assertEquals(6, validCarListTest.size());
-
 	}
-	
+
 	@Test
 	public void CarsByLocCatSeatTest() {
-		String[] locations = {"UNC, Charlotte"};
-		String[] categories = {"Economy"};
-		String[] seats = {"5"};
-		
+		String[] locations = { "UNC, Charlotte" };
+		String[] categories = { "Economy" };
+		String[] seats = { "5" };
+
 		ArrayList<Car> validCarListbyCategoryAndSeats = new ArrayList<Car>();
-		validCarListbyCategoryAndSeats = dao.CarsByLocCatSeat(locations, categories, seats);
+		validCarListbyCategoryAndSeats = bookingDao.CarsByLocCatSeat(locations, categories, seats);
 		assertEquals(5, validCarListbyCategoryAndSeats.size());
 	}
-	
-	@Test
 
+	@Test
 	public void CarsByLocCatTest() {
-		String[] locations = {"UNC, Charlotte"};
-		String[] categories = {"Economy"};
-		
+		String[] locations = { "UNC, Charlotte" };
+		String[] categories = { "Economy" };
+
 		ArrayList<Car> validCarListbyLocationAndCategory = new ArrayList<Car>();
-		validCarListbyLocationAndCategory = dao.CarsByLocCat(locations, categories);
+		validCarListbyLocationAndCategory = bookingDao.CarsByLocCat(locations, categories);
 		assertEquals(5, validCarListbyLocationAndCategory.size());
-	
-	
 	}
-	
-	@Test
 
+	@Test
 	public void CarsByLocSeatsTest() {
-		String[] locations = {"UNC, Charlotte"};
-		String[] seats = {"7"};
-		
+		String[] locations = { "UNC, Charlotte" };
+		String[] seats = { "7" };
+
 		ArrayList<Car> validCarListbyLocationAndSeats = new ArrayList<Car>();
-		validCarListbyLocationAndSeats = dao.CarsByLocSeats(locations, seats);
+		validCarListbyLocationAndSeats = bookingDao.CarsByLocSeats(locations, seats);
 		assertEquals(2, validCarListbyLocationAndSeats.size());
-
 	}
-	
-	@Test
 
+	@Test
 	public void CarsBySeatsCatTest() {
-		String[] categories = {"Economy"};
-		String[] seats = {"7"};
-		
+		String[] categories = { "Economy" };
+		String[] seats = { "7" };
+
 		ArrayList<Car> validCarListbyCategoryAndSeats = new ArrayList<Car>();
-		validCarListbyCategoryAndSeats = dao.CarsBySeatsCat(categories, seats);
+		validCarListbyCategoryAndSeats = bookingDao.CarsBySeatsCat(categories, seats);
 		assertEquals(0, validCarListbyCategoryAndSeats.size());
-
 	}
-	
-	@Test
 
+	@Test
 	public void CarsByLocationsTest() {
-		String[] locations = {"Concord Mills"};
-		
+		String[] locations = { "Concord Mills" };
+
 		ArrayList<Car> validCarListbyLocations = new ArrayList<Car>();
-		validCarListbyLocations = dao.CarsByLoc(locations);
+		validCarListbyLocations = bookingDao.CarsByLoc(locations);
 		assertEquals(6, validCarListbyLocations.size());
-
 	}
-	
-	@Test
 
+	@Test
 	public void CarsByCategoriesTest() {
-		String[] Categories = {"Economy"};
-	
+		String[] Categories = { "Economy" };
+
 		ArrayList<Car> validCarListbyCategories = new ArrayList<Car>();
-		validCarListbyCategories = dao.CarsByLoc(Categories);
+		validCarListbyCategories = bookingDao.CarsByLoc(Categories);
 		assertEquals(0, validCarListbyCategories.size());
-
 	}
-	
+
 	@Test
-
 	public void CarsBySeats() {
-		String[] seats = {"5"};
-	
-		ArrayList<Car> validCarListbySeats = new ArrayList<Car>();
-		validCarListbySeats = dao.CarsBySeats(seats);
-		assertEquals(0, validCarListbySeats.size());
+		String[] seats = { "5" };
 
+		ArrayList<Car> validCarListbySeats = new ArrayList<Car>();
+		validCarListbySeats = bookingDao.CarsBySeats(seats);
+		assertEquals(0, validCarListbySeats.size());
 	}
-	
+
 	@Test
 	public void insertBookingTest() {
 		LocalDateTime intimestamp = LocalDateTime.now();
 		LocalDateTime outtimestamp = LocalDateTime.now().plusHours(1);
-		Booking testBookingInfo = new Booking("rbalanka3@uncc.edu", 1, intimestamp, outtimestamp, "UNC, Charlotte", (float) 500.85);
-		int result = dao.insertBooking(testBookingInfo);
-		
-		//it will pass test now. but if test is run again, this booking gets added again to the database & the expected car ID increases by 1
-		assertEquals(20, result);
+		Booking testBookingInfo = new Booking("rbalanka3@uncc.edu", 1, intimestamp, outtimestamp, "UNC, Charlotte",
+				(float) 500.85);
+		int result = bookingDao.insertBooking(testBookingInfo);
+
+		// it will pass test now. but if test is run again, this booking gets
+		// added again to the database & the expected car ID increases by 1
+		assertEquals(23, result);
 	}
-	
+
 }

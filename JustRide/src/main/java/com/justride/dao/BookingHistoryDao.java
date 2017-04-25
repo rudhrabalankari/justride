@@ -14,12 +14,11 @@ public class BookingHistoryDao implements IBookingHistoryDao {
 
 	@Override
 	public ArrayList<Booking> getBookingbyUserId(String email) {
-
+		CustomAddressDAO customAddressDAO = new CustomAddressDAO();
 		ArrayList<Booking> bookings = new ArrayList<Booking>();
 
 		Connection con;
 		try {
-
 			con = GetConnection.getConnection();
 			String sql = "select booking_id, email, carid, intimestamp, outtimestamp, pickup_location, amount from bookinginfo where email=? and intimestamp >= now()";
 			java.sql.PreparedStatement stmt = con.prepareStatement(sql);
@@ -30,17 +29,22 @@ public class BookingHistoryDao implements IBookingHistoryDao {
 				int carId = rs.getInt("carid");
 				String inTimeStamp = rs.getString("intimestamp").substring(0, 16);
 				String outTImeStamp = rs.getString("outtimestamp").substring(0, 16);
-				String pickup_location = rs.getString("pickup_location");
+				String pickup_location = "";
+				System.out.println("In the booking History Dao=======33");
+				if (!customAddressDAO.getCusLocationIfExists(bookingId).equals("empty")) {
+					System.out.println("In the booking History Dao=======34, booking id===" + bookingId);
+					pickup_location = customAddressDAO.getCusLocationIfExists(bookingId);
+				} else {
+					System.out.println("In the booking History Dao=======37");
+					pickup_location = rs.getString("pickup_location");
+				}
 				float amount = rs.getFloat("amount");
 				CarDao carDao = new CarDao();
 				String carName = carDao.getCarbyId(carId).getCarName();
-
 				Booking booking = new Booking(inTimeStamp, outTImeStamp, bookingId, email, carName, pickup_location,
 						amount);
 				bookings.add(booking);
-
 			}
-
 		}
 
 		catch (ClassNotFoundException e) {
@@ -55,21 +59,20 @@ public class BookingHistoryDao implements IBookingHistoryDao {
 	@Override
 	public boolean deleteBooking(int bookingId) {
 		Connection con;
+		CustomAddressDAO customAddressDAO = new CustomAddressDAO();
 		try {
 			con = GetConnection.getConnection();
 			String sql = "delete from bookinginfo where booking_id=?";
 			java.sql.PreparedStatement stmt = con.prepareStatement(sql);
 			stmt.setInt(1, bookingId);
+			customAddressDAO.deleteCusLocation(bookingId);
 			stmt.executeUpdate();
 			return true;
-		}
-
-		catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return false;
 	}
 

@@ -49,7 +49,7 @@ public class BookingHistoryController {
 			bookings = bookingHistoryServie.getBookingbyUserId(email);
 		}
 
-		model.addAttribute("user", session.getAttribute("email"));
+		model.addAttribute("email", session.getAttribute("email"));
 		model.addAttribute("bookings", bookings);
 		System.out.println("size====" + bookings.size());
 		return "mybookings";

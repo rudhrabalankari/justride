@@ -26,7 +26,7 @@
 			<a href="#" class="navbar-brand" style="font-size: 40px">JustRide</a>
 		</div>
 		<ul class="nav navbar-nav navbar-right">
-			Hello ${userName}
+			<strong>Hello ${email}</strong>
 			<a href="#" button type="submit" class="btn btn-primary"
 				style="margin: 13px 12px 12px 10px;">Logout</a>
 		</ul>

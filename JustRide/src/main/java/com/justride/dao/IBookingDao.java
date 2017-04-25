@@ -31,6 +31,5 @@ public interface IBookingDao {
 
 	public int insertBooking(Booking booking);
 
-	public void changePickupLocation(int bookingId, String pickupLocation);
-
+	
 }

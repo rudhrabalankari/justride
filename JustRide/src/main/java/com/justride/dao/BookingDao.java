@@ -377,30 +377,6 @@ public class BookingDao implements IBookingDao {
 
 	}
 
-	@Override
-	public void changePickupLocation(int bookingId, String pickupLocation) {
-		Connection conn;
-
-		try {
-			conn = GetConnection.getConnection();
-			if (conn != null) {
-				String sql = "insert into booking_pickuplocation values (?,?)";
-				try {
-					java.sql.PreparedStatement statement = conn.prepareStatement(sql);
-					statement.setInt(1, bookingId);
-					statement.setString(2, pickupLocation);
-					statement.executeUpdate();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-
-			}
-
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-	}
+	
 
 }

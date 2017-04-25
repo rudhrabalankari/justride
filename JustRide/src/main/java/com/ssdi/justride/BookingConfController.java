@@ -121,9 +121,9 @@ public class BookingConfController {
 			address1 = request.getParameter("address1");
 			address2 = request.getParameter("address2");
 			if (address1.length() > 2 && address2.length() > 2) {
-				System.out.println("Passss");
-				session.setAttribute("pickupLocation", (address1 + address2));
+				session.setAttribute("pickupLocation", address1.concat(address2));
 				bookingId = paymentService.insertBooking(booking);
+				paymentService.customLocation(bookingId, (address1.concat(address2)));
 			} else {
 				System.out.println("Invalid address details!");
 				model.addAttribute("error", "Invalid address details!");
