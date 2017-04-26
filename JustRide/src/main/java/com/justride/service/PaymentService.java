@@ -10,9 +10,9 @@ public class PaymentService implements IPaymentInterface {
 	CustomAddressDAO customAddressDAO = new CustomAddressDAO();
 
 	@Override
-	public int insertBooking(Booking booking) {
+	public int insertBooking(Booking booking, String email) {
 
-		return bookingDao.insertBooking(booking);
+		return bookingDao.insertBooking(booking, email);
 	}
 
 	@Override

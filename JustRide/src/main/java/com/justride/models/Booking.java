@@ -7,9 +7,30 @@ public class Booking {
 	private String stringInTime;
 	private String stringOutTime;
 	private int bookingId;
+	private String email;
+	private int carId;
+	private LocalDateTime intimeStamp, outTimeStamp;
+	private String pickupLocation;
+	private float amount;
+	private String carName;
+	private String dropoffLocation;
 
 	public String getStringInTime() {
 		return stringInTime;
+	}
+
+	public Booking(String stringInTime, String stringOutTime, int bookingId, String email, int carId,
+			String pickupLocation, float amount, String carName, String dropoffLocation) {
+		super();
+		this.stringInTime = stringInTime;
+		this.stringOutTime = stringOutTime;
+		this.bookingId = bookingId;
+		this.email = email;
+		this.carId = carId;
+		this.pickupLocation = pickupLocation;
+		this.amount = amount;
+		this.carName = carName;
+		this.dropoffLocation = dropoffLocation;
 	}
 
 	public void setStringInTime(String stringInTime) {
@@ -18,6 +39,14 @@ public class Booking {
 
 	public String getStringOutTime() {
 		return stringOutTime;
+	}
+
+	public String getDropoffLocation() {
+		return dropoffLocation;
+	}
+
+	public void setDropoffLocation(String dropoffLocation) {
+		this.dropoffLocation = dropoffLocation;
 	}
 
 	public void setStringOutTime(String stringOutTime) {
@@ -32,31 +61,12 @@ public class Booking {
 		this.bookingId = bookingId;
 	}
 
-	private String email;
-	private int carId;
-	private LocalDateTime intimeStamp, outTimeStamp;
-	private String pickupLocation;
-	private float amount;
-	private String carName;
-
 	public String getCarName() {
 		return carName;
 	}
 
 	public void setCarName(String carName) {
 		this.carName = carName;
-	}
-
-	public Booking(String stringInTime, String stringOutTime, int bookingId, String email, String carName,
-			String pickupLocation, float amount) {
-		super();
-		this.stringInTime = stringInTime;
-		this.stringOutTime = stringOutTime;
-		this.bookingId = bookingId;
-		this.email = email;
-		this.carName = carName;
-		this.pickupLocation = pickupLocation;
-		this.amount = amount;
 	}
 
 	public String getEmail() {

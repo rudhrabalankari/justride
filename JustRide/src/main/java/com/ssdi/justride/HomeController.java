@@ -71,8 +71,8 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "justride/registerform", method = RequestMethod.POST)
-	public String registrationSubmit(@ModelAttribute("user") User user, BindingResult result, ModelMap model)
-			throws ClassNotFoundException {
+	public String registrationSubmit(@ModelAttribute("user") User user, BindingResult result, ModelMap model,
+			HttpServletRequest request) throws ClassNotFoundException {
 		String error = "";
 		String password = user.getPassword();
 		if (user.getCnfPwd().equals(password)) {
@@ -86,6 +86,8 @@ public class HomeController {
 				// justRideService.registrationSubmit(user);
 				model.addAttribute("email", "Registered as " + user.getEmail());
 				model.addAttribute("status", "Registred Successfully");
+				HttpSession session = request.getSession();
+				session.setAttribute("email", user.getEmail());
 				return "/home2";
 			}
 		}

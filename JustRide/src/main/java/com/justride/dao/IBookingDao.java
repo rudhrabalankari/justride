@@ -7,10 +7,6 @@ import com.justride.models.Car;
 
 public interface IBookingDao {
 
-	public boolean insertCar(int carId, String InDateStamp, String outDateStamp);
-
-	public float calculateAmount(String InDateStamp, String outDateStamp, int carId);
-
 	public ArrayList<Car> filterCars(ArrayList<Car> cars);
 
 	public ArrayList<Car> getValidCarList(String intimeStamp, String outTimeStamp, ArrayList<String> locationList);
@@ -29,7 +25,6 @@ public interface IBookingDao {
 
 	public ArrayList<Car> CarsBySeats(String[] seats);
 
-	public int insertBooking(Booking booking);
+	public int insertBooking(Booking booking, String email);
 
-	
 }

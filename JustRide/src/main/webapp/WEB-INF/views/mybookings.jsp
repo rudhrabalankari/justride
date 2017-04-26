@@ -65,7 +65,7 @@
 								<td>${booking.stringInTime}</td>
 								<td>${booking.stringOutTime}</td>
 								<td>${booking.pickupLocation}</td>
-								<td>${booking.pickupLocation}</td>
+								<td>${booking.dropoffLocation}</td>
 								<td>${booking.carName}</td>
 								<td><form action="deleteBooking">
 										<button type="submit" name="bookingId"

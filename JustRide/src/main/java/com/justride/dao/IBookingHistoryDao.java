@@ -7,5 +7,7 @@ import com.justride.models.Booking;
 public interface IBookingHistoryDao {
 	public ArrayList<Booking> getBookingbyUserId(String email);
 
-	public boolean deleteBooking(int bookingId);
+	public boolean deleteBooking(int bookingId, String emailId);
+
+	public float getBookingPriceById(int bookingId);
 }

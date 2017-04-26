@@ -1,5 +1,6 @@
 package com.ssdi.justride;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -106,14 +107,8 @@ public class BookingConfController {
 		int bookingId = 0;
 		HttpSession session = request.getSession();
 		Booking booking = (Booking) session.getAttribute("booking");
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
-		String intime = booking.getIntimeStamp().format(formatter);
-		System.out.println("In time stamp==========" + intime);
-		String outTime = booking.getOutTimeStamp().format(formatter);
-		System.out.println("In time stamp==========" + outTime);
+		String email = (String) session.getAttribute("email");
 		PaymentService paymentService = new PaymentService();
-
 		String pickupType = request.getParameter("pickuptype");
 		System.out.println("Selected pickup type====" + pickupType);
 		String address1 = "", address2 = "";
@@ -122,7 +117,7 @@ public class BookingConfController {
 			address2 = request.getParameter("address2");
 			if (address1.length() > 2 && address2.length() > 2) {
 				session.setAttribute("pickupLocation", address1.concat(address2));
-				bookingId = paymentService.insertBooking(booking);
+				bookingId = paymentService.insertBooking(booking, email);
 				paymentService.customLocation(bookingId, (address1.concat(address2)));
 			} else {
 				System.out.println("Invalid address details!");
@@ -132,16 +127,13 @@ public class BookingConfController {
 				model.addAttribute("user", user);
 				return "bookinginfo";
 			}
-			System.out.println("Address1=============" + address1);
-			System.out.println("Address2=============" + address2);
 		} else {
 			System.out.println("Selected pickup type====" + pickupType);
 
-			bookingId = paymentService.insertBooking(booking);
+			bookingId = paymentService.insertBooking(booking, email);
 		}
-
 		System.out.println("The booking id after booking is============" + bookingId);
-		model.addAttribute("error", "Booking confirmed with booking id: " + bookingId);
+		model.addAttribute("error", bookingId + "Ride Confirmed, Please check your Mail");
 		return "home2";
 	}
 }

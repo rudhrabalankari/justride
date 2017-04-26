@@ -146,7 +146,6 @@ public class UserDao implements IUserDao {
 		try {
 			conn = GetConnection.getConnection();
 			if (conn != null) {
-				System.out.println("Connected");
 				String sql = "select firstname, lastname, phone, cardno, zip from UserRegistration where email=?";
 				Connection con = GetConnection.getConnection();
 				java.sql.PreparedStatement stmt = con.prepareStatement(sql);

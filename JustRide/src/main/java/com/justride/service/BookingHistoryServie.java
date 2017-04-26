@@ -14,9 +14,9 @@ public class BookingHistoryServie implements IBookingHistory {
 	}
 
 	@Override
-	public boolean deleteBooking(int bookingId) {
+	public boolean deleteBooking(int bookingId, String emailId) {
 		BookingHistoryDao bookingHistoryDao = new BookingHistoryDao();
-		return bookingHistoryDao.deleteBooking(bookingId);
+		return bookingHistoryDao.deleteBooking(bookingId, emailId);
 	}
 
 }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import com.justride.models.Booking;
 import com.justride.models.Car;
 import com.justride.models.User;
 import com.justride.util.GetConnection;
+import com.justride.util.MailUtil;
 
 public class BookingDao implements IBookingDao {
 
@@ -24,16 +26,6 @@ public class BookingDao implements IBookingDao {
 	ArrayList<Car> validCarsList = new ArrayList<Car>();
 	String inTimeStamp2 = "", outTimeStamp2 = "";
 	ArrayList<String> locationList = new ArrayList<String>();
-
-	@Override
-	public boolean insertCar(int carId, String InDateStamp, String outDateStamp) {
-		return false;
-	}
-
-	@Override
-	public float calculateAmount(String InDateStamp, String outDateStamp, int carId) {
-		return 0;
-	}
 
 	@Override
 	public ArrayList<Car> getValidCarList(String intimeStamp, String outTimeStamp, ArrayList<String> locationList) {
@@ -325,14 +317,11 @@ public class BookingDao implements IBookingDao {
 	}
 
 	@Override
-	public int insertBooking(Booking booking) {
-
+	public int insertBooking(Booking booking, String email) {
 		Connection conn;
 		int bookingId = -1;
-
 		try {
 			conn = GetConnection.getConnection();
-
 			if (conn != null) {
 
 				// select max(booking_id) from bookinginfo;
@@ -344,31 +333,35 @@ public class BookingDao implements IBookingDao {
 					java.sql.PreparedStatement statement2 = conn.prepareStatement(sql2);
 					statement.setString(1, booking.getEmail());
 					statement.setInt(2, booking.getCarId());
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
-					String intime = booking.getIntimeStamp().format(formatter);
-					System.out.println("In time stamp==========" + intime);
-					String outTime = booking.getOutTimeStamp().format(formatter);
-					System.out.println("In time stamp==========" + outTime);
-					statement.setString(3, intime);
-					statement.setString(4, outTime);
+					Timestamp time1 = Timestamp.valueOf(booking.getIntimeStamp());
+					Timestamp time2 = Timestamp.valueOf(booking.getOutTimeStamp());
+					statement.setTimestamp(3, time1);
+					statement.setTimestamp(4, time2);
 					statement.setString(5, booking.getPickupLocation());
-					statement.setFloat(6, booking.getAmount());
-					// int count = statement.executeUpdate();
+					float price = booking.getAmount();
+					statement.setFloat(6, price);
 					statement.executeUpdate();
 					ResultSet rs = statement2.executeQuery();
-
 					if (rs != null) {
 						while (rs.next()) {
 							bookingId = rs.getInt("max(booking_id)");
 						}
+						UserDao userDao = new UserDao();
+						MailUtil mailUtil = new MailUtil();
+						User user = userDao.getUserDetails(email);
+						String messageBody = "Your ride has been confirmed and the cost of $" + price
+								+ " has been debited from xxxx-" + user.getCardNo()
+								+ "\n\n You can check your reservations in your dashboard"
+								+ "\n\n We hope to see you again!"
+								+ "\n\n ---JustRide Sales Management";
+						String subject = bookingId + ":" + "Booking Confirmation";
+						mailUtil.sendEmail(email, user.getFirstName(), messageBody, subject);
 					}
 
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-
 			}
-
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -376,7 +369,5 @@ public class BookingDao implements IBookingDao {
 		return bookingId;
 
 	}
-
-	
 
 }

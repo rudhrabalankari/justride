@@ -1,6 +1,5 @@
 package com.ssdi.justride;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.justride.models.Booking;
-import com.justride.models.Car;
-import com.justride.models.User;
 import com.justride.service.BookingHistoryServie;
 
 @Controller
@@ -25,6 +22,7 @@ public class BookingHistoryController {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("email");
 		ArrayList<Booking> bookings = bookingHistoryServie.getBookingbyUserId(email);
+		System.out.println("Email id=========" + email);
 		if (bookings.size() == 0) {
 			String error = "No bookings for " + email;
 			model.addAttribute("error", error);
@@ -44,12 +42,11 @@ public class BookingHistoryController {
 		BookingHistoryServie bookingHistoryServie = new BookingHistoryServie();
 		HttpSession session = request.getSession();
 		ArrayList<Booking> bookings = new ArrayList<Booking>();
-		if (bookingHistoryServie.deleteBooking(bookingId)) {
-			String email = (String) session.getAttribute("email");
-			bookings = bookingHistoryServie.getBookingbyUserId(email);
-		}
-
-		model.addAttribute("email", session.getAttribute("email"));
+		String email = (String) session.getAttribute("email");
+		bookingHistoryServie.deleteBooking(bookingId, email);
+		bookings = bookingHistoryServie.getBookingbyUserId(email);
+		String emailId = (String) session.getAttribute("email");
+		model.addAttribute("email", emailId);
 		model.addAttribute("bookings", bookings);
 		System.out.println("size====" + bookings.size());
 		return "mybookings";

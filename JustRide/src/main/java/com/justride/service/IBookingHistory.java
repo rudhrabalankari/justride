@@ -7,6 +7,6 @@ import com.justride.models.Booking;
 public interface IBookingHistory {
 	public ArrayList<Booking> getBookingbyUserId(String email);
 
-	public boolean deleteBooking(int bookingId);
+	public boolean deleteBooking(int bookingId, String mailId);
 
 }
